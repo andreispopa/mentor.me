@@ -1,7 +1,7 @@
 {
     "name": "server",
     "version": "1.0.0",
-    "description": "Mentor.me API",
+    "description": "mentor.me API",
     "main": "server.js",
     "scripts": {
         "build": "babel server.js --out-file build/server-compiled.js",
