@@ -1,7 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 
-// TO DO: pull values from .env file
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_KEY,
     authDomain: process.env.REACT_APP_FIREABASE_DOMAIN,
@@ -11,8 +10,6 @@ const firebaseConfig = {
     messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
     appId: process.env.REACT_APP_FIREBASE_ID,
 };
-console.log(firebaseConfig);
-// Initialize Firebase
-const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-export default firebaseApp;
+// Initialize Firebase
+export const firebaseApp = firebase.initializeApp(firebaseConfig);
