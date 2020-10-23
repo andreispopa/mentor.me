@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { auth } from '../auth';
-import * as ROUTES from '../../constants';
-
 import { Result, Alert, Form, Input, Button } from 'antd';
+
+import { auth } from '../auth';
+import { ROUTES } from '../../constants';
 
 const layout = {
     labelCol: {
@@ -37,10 +37,9 @@ export const CreateAccountPage = () => {
                 password,
             };
 
-            await auth.createAccount(newUserInfo, () => {
-                auth.signOut();
-                setcreatedSuccessfully(true);
-            });
+            await auth.createAccount(newUserInfo);
+            auth.signOut();
+            setcreatedSuccessfully(true);
         } catch (err) {
             setErrorMessage(err.message);
         }

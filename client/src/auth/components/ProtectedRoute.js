@@ -1,10 +1,16 @@
 import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+
+import { Loading } from '../../ui';
 import { AuthContext } from '../../context';
-import * as ROUTES from '../../constants';
+import { ROUTES } from '../../constants';
 
 export const ProtectedRoute = (props) => {
-    const { user } = useContext(AuthContext);
+    const { isLoading, user } = useContext(AuthContext);
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     if (!!user) {
         return <Route {...props} />;

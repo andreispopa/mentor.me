@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from 'react';
+
 import { auth } from '../auth';
 
 export const AuthContext = React.createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState();
+    const [authInfo, setAuthInfo] = useState(() => {
+        const user = auth.getCurrentUser();
+        const isLoading = !user;
+
+        return { isLoading, user };
+    });
 
     useEffect(() => {
-        const unsubscribe = auth.addAuthListener(setUser);
+        const unsubscribe = auth.addAuthListener(setAuthInfo);
         return unsubscribe;
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
     );
 };

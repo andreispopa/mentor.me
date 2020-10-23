@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react';
 import { Redirect, Link, useHistory } from 'react-router-dom';
-import { auth } from '../auth';
-import * as ROUTES from '../../constants';
-import { AuthContext } from '../../context';
-
 import { Alert, Form, Input, Button } from 'antd';
+
+import { auth } from '../auth';
+import { AuthContext } from '../../context';
+import { ROUTES } from '../../constants';
 
 const layout = {
     labelCol: {
@@ -22,17 +22,18 @@ const tailLayout = {
 };
 
 export const SignInPage = () => {
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
-    const [errorMessage, setErrorMessage] = useState();
     const { user } = useContext(AuthContext);
     const history = useHistory();
 
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [errorMessage, setErrorMessage] = useState();
+
     const onSignInClicked = async () => {
+        // TODO: Handle case when email or password field is empty.
         try {
-            await auth.signIn(email, password, () => {
-                history.push(ROUTES.HOME);
-            });
+            await auth.signIn(email, password);
+            history.push(ROUTES.HOME);
         } catch (err) {
             setErrorMessage(err.message);
         }

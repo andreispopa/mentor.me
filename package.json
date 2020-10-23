@@ -1,0 +1,21 @@
+{
+    "name": "mentor.me",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "client": "npm start --prefix ./client",
+        "server": "npm run dev --prefix ./server"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/andreispopa/mentor.me.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/andreispopa/mentor.me/issues"
+    },
+    "homepage": "https://github.com/andreispopa/mentor.me#readme"
+}

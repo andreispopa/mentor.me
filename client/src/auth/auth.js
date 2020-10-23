@@ -2,16 +2,19 @@ import { firebaseApp } from '../firebase';
 import axios from 'axios';
 
 class Auth {
-    async signIn(email, password, callback) {
+    getCurrentUser() {
+        return firebaseApp.auth().currentUser;
+    }
+
+    async signIn(email, password) {
         await firebaseApp.auth().signInWithEmailAndPassword(email, password);
-        callback();
     }
 
     signOut() {
         firebaseApp.auth().signOut();
     }
 
-    async createAccount({ firstName, lastName, email, password }, callback) {
+    async createAccount({ firstName, lastName, email, password }) {
         const userCreds = await firebaseApp
             .auth()
             .createUserWithEmailAndPassword(email, password);
@@ -23,10 +26,10 @@ class Auth {
             email,
         };
 
-        // TODO: 400 sent by the api causes the promise to be rejected but is still logged
+        // TODO: 400 code sent by the api causes the promise to be rejected but is still logged
         //       in the browser. Figure out why.
         await axios.post(
-            `${process.env.REACT_APP_CREATE_ACCOUNT}`,
+            `${process.env.REACT_APP_ACCOUNTS}`,
             JSON.stringify(newUserInfo),
             {
                 headers: {
@@ -34,12 +37,15 @@ class Auth {
                 },
             }
         );
-
-        callback();
     }
 
     addAuthListener(callback) {
-        return firebaseApp.auth().onAuthStateChanged(callback);
+        return firebaseApp.auth().onAuthStateChanged((user) => {
+            callback({
+                isLoading: false,
+                user,
+            });
+        });
     }
 }
 

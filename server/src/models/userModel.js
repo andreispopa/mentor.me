@@ -1,8 +1,11 @@
-import { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export const UserSchema = new Schema({
+const UserSchema = new Schema({
     _id: String,
     firstName: String,
     lastName: String,
     email: String,
+    contacts: [{ type: String, ref: 'User' }],
 });
+
+export const User = mongoose.model('User', UserSchema);
