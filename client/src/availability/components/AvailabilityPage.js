@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Empty } from 'antd';
 
 import { getAvailabilityDateToTimesMap } from '../helper';
-import { Header } from '../../ui';
+import { TopHeader } from '../../ui';
 import { AuthContext } from '../../context';
 import { AvailabilityListItem } from './AvailabilityListItem';
 import { AddAvailability } from './AddAvailability';
@@ -12,7 +12,7 @@ export const AvailabilityPage = () => {
 
     const [availableDates, setAvailableDates] = useState({});
 
-    const getAvailability = useCallback(async () => {
+    const fetchAvailability = useCallback(async () => {
         try {
             const dates = await getAvailabilityDateToTimesMap(user.uid);
             setAvailableDates(dates);
@@ -22,17 +22,17 @@ export const AvailabilityPage = () => {
     }, [user]);
 
     useEffect(() => {
-        getAvailability();
-    }, [getAvailability]);
+        fetchAvailability();
+    }, [fetchAvailability]);
 
     return (
         <>
-            <Header />
+            <TopHeader />
             <h1>My Availability</h1>
             <AddAvailability
                 user={user}
                 availability={availableDates}
-                onAvailabilityAdded={getAvailability}
+                onAvailabilityAdded={fetchAvailability}
             />
 
             {availableDates.size > 0 ? (

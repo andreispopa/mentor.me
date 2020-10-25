@@ -4,12 +4,7 @@ import { List } from '../../../ui';
 import { SentRequestsListItem } from './SentRequestsListItem';
 import { ReceivedRequestsListItem } from './ReceivedRequestsListItem';
 
-export const RequestsList = ({
-    sentRequests,
-    receivedRequests,
-    onChange,
-    onAccepted,
-}) => {
+export const RequestsList = ({ sentRequests, receivedRequests, ...props }) => {
     return (
         <>
             {sentRequests.length > 0 || receivedRequests.length > 0 ? (
@@ -22,8 +17,7 @@ export const RequestsList = ({
                     <List
                         items={receivedRequests}
                         itemComponent={ReceivedRequestsListItem}
-                        onChange={onChange}
-                        onAccepted={onAccepted}
+                        {...props}
                     />
                 </div>
             ) : null}

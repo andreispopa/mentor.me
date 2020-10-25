@@ -3,25 +3,25 @@ import axios from 'axios';
 
 export const ReceivedRequestsListItem = ({
     item: request,
-    onChange,
-    onAccepted,
+    onChange: handleChange,
+    onRequestAccepted: handleRequestAccepted,
 }) => {
-    const onAcceptClicked = async () => {
+    const handleAcceptClicked = async () => {
         try {
             await axios.put(`${process.env.REACT_APP_REQUESTS}/${request._id}`);
-            onChange();
-            onAccepted();
+            handleChange();
+            handleRequestAccepted();
         } catch (err) {
             console.log(`Accept Request Error: ${err}`);
         }
     };
 
-    const onRejectClicked = async () => {
+    const handleRejectClicked = async () => {
         try {
             await axios.delete(
                 `${process.env.REACT_APP_REQUESTS}/${request._id}`
             );
-            onChange();
+            handleChange();
         } catch (err) {
             console.log(`Cancel Request Error: ${err}`);
         }
@@ -30,8 +30,8 @@ export const ReceivedRequestsListItem = ({
     return (
         <div>
             <h3>{request.sender}</h3>
-            <button onClick={onAcceptClicked}>accept</button>
-            <button onClick={onRejectClicked}>reject</button>
+            <button onClick={handleAcceptClicked}>accept</button>
+            <button onClick={handleRejectClicked}>reject</button>
         </div>
     );
 };

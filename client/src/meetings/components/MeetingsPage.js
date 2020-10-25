@@ -6,7 +6,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context';
 import { ScheduleMeeting } from './ScheduleMeeting';
 import { MeetingsListItem } from './MeetingsListItem';
-import { List, Header } from '../../ui';
+import { List, TopHeader } from '../../ui';
 import { ROUTES } from '../../constants';
 
 export const MeetingsPage = () => {
@@ -30,7 +30,7 @@ export const MeetingsPage = () => {
 
     return (
         <>
-            <Header />
+            <TopHeader />
             <h1>My Meetings</h1>
             <ScheduleMeeting onMeetingScheduled={getMeetings} />
 

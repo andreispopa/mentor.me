@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
 
-import { fetchContacts } from './helper';
+import { getContacts } from './helper';
 
 export const useContacts = (user) => {
     const [contacts, setContacts] = useState([]);
 
     useEffect(() => {
-        const getContacts = async () => {
+        const fetchContacts = async () => {
             try {
-                const contactsList = await fetchContacts(user.uid);
+                const contactsList = await getContacts(user.uid);
                 setContacts(contactsList);
             } catch (err) {
                 console.log(`Get Contacts Error: ${err}`);
             }
         };
-        getContacts();
+        fetchContacts();
     }, [user]);
 
     return contacts;

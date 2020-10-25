@@ -13,7 +13,7 @@ export const AddContactModal = ({ user, onContactAdded }) => {
     };
 
     // TODO: validate email field
-    const onModalAddContactClicked = async () => {
+    const handleModalAddContactClicked = async () => {
         setModalLoading(true);
         try {
             await createRequest(user.email, newContactEmail);
@@ -25,7 +25,7 @@ export const AddContactModal = ({ user, onContactAdded }) => {
         }
     };
 
-    const onModalCancelClicked = () => {
+    const handleModalCancelClicked = () => {
         setNewContactEmail('');
         setModalVisible(false);
         setModalLoading(false);
@@ -39,17 +39,17 @@ export const AddContactModal = ({ user, onContactAdded }) => {
             <Modal
                 visible={modalVisible}
                 title="Add Contact"
-                onOk={onModalAddContactClicked}
-                onCancel={onModalCancelClicked}
+                onOk={handleModalAddContactClicked}
+                onCancel={handleModalCancelClicked}
                 footer={[
-                    <Button key="back" onClick={onModalCancelClicked}>
+                    <Button key="back" onClick={handleModalCancelClicked}>
                         Cancel
                     </Button>,
                     <Button
                         key="submit"
                         type="primary"
                         loading={modalLoading}
-                        onClick={onModalAddContactClicked}
+                        onClick={handleModalAddContactClicked}
                     >
                         Add Contact
                     </Button>,

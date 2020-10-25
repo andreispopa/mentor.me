@@ -1,14 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import { AuthContext } from '../../context';
-import { Header } from '../../ui';
+import { TopHeader } from '../../ui';
 import { ContactsList } from './ContactsList';
 import { RequestsList } from './requests/RequestsList';
-import {
-    fetchSentRequests,
-    fetchReceivedRequests,
-    fetchContacts,
-} from '../helper';
+import { getSentRequests, getReceivedRequests, getContacts } from '../helper';
 import { AddContactModal } from './AddContactModal';
 
 export const ContactsPage = () => {
@@ -18,27 +14,27 @@ export const ContactsPage = () => {
     const [receivedRequests, setReceivedRequests] = useState([]);
     const [contacts, setContacts] = useState([]);
 
-    const getContacts = useCallback(async () => {
+    const fetchContacts = useCallback(async () => {
         try {
-            const contactsList = await fetchContacts(user.uid);
+            const contactsList = await getContacts(user.uid);
             setContacts(contactsList);
         } catch (err) {
             console.log(`Get Contacts Error: ${err}`);
         }
     }, [user]);
 
-    const getSentRequests = useCallback(async () => {
+    const fetchSentRequests = useCallback(async () => {
         try {
-            const sentRequests = await fetchSentRequests(user.email);
+            const sentRequests = await getSentRequests(user.email);
             setSentRequests(sentRequests);
         } catch (err) {
             console.log(`Get Sent Requests Error: ${err}`);
         }
     }, [user]);
 
-    const getReceivedRequests = useCallback(async () => {
+    const fetchReceivedRequests = useCallback(async () => {
         try {
-            const receivedRequests = await fetchReceivedRequests(user.email);
+            const receivedRequests = await getReceivedRequests(user.email);
             setReceivedRequests(receivedRequests);
         } catch (err) {
             console.log(`Get Received Requests Error: ${err}`);
@@ -46,28 +42,28 @@ export const ContactsPage = () => {
     }, [user]);
 
     useEffect(() => {
-        getContacts();
-    }, [getContacts]);
+        fetchContacts();
+    }, [fetchContacts]);
 
     useEffect(() => {
-        getSentRequests();
-    }, [getSentRequests]);
+        fetchSentRequests();
+    }, [fetchSentRequests]);
 
     useEffect(() => {
-        getReceivedRequests();
-    }, [getReceivedRequests]);
+        fetchReceivedRequests();
+    }, [fetchReceivedRequests]);
 
     return (
         <>
-            <Header />
+            <TopHeader />
 
-            <AddContactModal user={user} onContactAdded={getSentRequests} />
+            <AddContactModal user={user} onContactAdded={fetchSentRequests} />
 
             <RequestsList
                 sentRequests={sentRequests}
                 receivedRequests={receivedRequests}
-                onChange={getReceivedRequests}
-                onAccepted={getContacts}
+                onChange={fetchReceivedRequests}
+                onRequestAccepted={fetchContacts}
             />
             <ContactsList contacts={contacts} />
         </>

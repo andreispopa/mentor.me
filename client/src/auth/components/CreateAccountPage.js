@@ -1,24 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Result, Alert, Form, Input, Button } from 'antd';
+import { Row, Col, Result, Alert, Form, Input, Button } from 'antd';
+import styled from 'styled-components';
 
+import { PageContainer } from '../../ui';
 import { auth } from '../auth';
 import { ROUTES } from '../../constants';
 
-const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 8,
-    },
-};
-const tailLayout = {
-    wrapperCol: {
-        offset: 8,
-        span: 16,
-    },
-};
+const LoginContainer = styled(Col)`
+    background-color: Gainsboro;
+    padding: 10px 20px;
+`;
 
 export const CreateAccountPage = () => {
     const [firstName, setFirstName] = useState();
@@ -28,7 +20,7 @@ export const CreateAccountPage = () => {
     const [errorMessage, setErrorMessage] = useState();
     const [createdSuccessfully, setcreatedSuccessfully] = useState(false);
 
-    const onClicked = async () => {
+    const handleFinish = async () => {
         try {
             const newUserInfo = {
                 firstName,
@@ -45,12 +37,12 @@ export const CreateAccountPage = () => {
         }
     };
 
-    const onFailed = (errorInfo) => {
+    const handleFinishFailed = (errorInfo) => {
         setErrorMessage(errorInfo);
     };
 
     return (
-        <div>
+        <PageContainer justify="center" align="middle">
             {createdSuccessfully ? (
                 <Result
                     title="Account created succesfully."
@@ -63,13 +55,12 @@ export const CreateAccountPage = () => {
                     }
                 />
             ) : (
-                <>
-                    <h2>Enter the following data to create a new account</h2>
+                <LoginContainer xs={22} sm={22} md={10} lg={8}>
+                    <h2>CREATE A NEW ACCOUNT</h2>
                     <Form
-                        {...layout}
                         name="basic"
-                        onFinish={onClicked}
-                        onFinishFailed={onFailed}
+                        onFinish={handleFinish}
+                        onFinishFailed={handleFinishFailed}
                     >
                         {errorMessage && (
                             <Alert
@@ -78,37 +69,49 @@ export const CreateAccountPage = () => {
                                 showIcon
                             />
                         )}
-
+                        <Row>
+                            <Col span={12}>
+                                <Form.Item
+                                    name="firstName"
+                                    onChange={(e) =>
+                                        setFirstName(e.target.value)
+                                    }
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your first name!',
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="first name"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12}>
+                                <Form.Item
+                                    name="lastName"
+                                    onChange={(e) =>
+                                        setLastName(e.target.value)
+                                    }
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message:
+                                                'Please input your lastName!',
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="last name"
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
                         <Form.Item
-                            label="FirstName"
-                            name="firstName"
-                            onChange={(e) => setFirstName(e.target.value)}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your first name!',
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="LastName"
-                            name="lastName"
-                            onChange={(e) => setLastName(e.target.value)}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your lastName!',
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Email"
                             name="email"
                             onChange={(e) => setEmail(e.target.value)}
                             rules={[
@@ -118,11 +121,10 @@ export const CreateAccountPage = () => {
                                 },
                             ]}
                         >
-                            <Input />
+                            <Input size="large" placeholder="your email" />
                         </Form.Item>
 
                         <Form.Item
-                            label="Password"
                             name="password"
                             onChange={(e) => setPassword(e.target.value)}
                             rules={[
@@ -132,17 +134,20 @@ export const CreateAccountPage = () => {
                                 },
                             ]}
                         >
-                            <Input.Password />
+                            <Input.Password
+                                size="large"
+                                placeholder="password"
+                            />
                         </Form.Item>
 
-                        <Form.Item {...tailLayout}>
-                            <Button type="primary" htmlType="submit">
-                                Create Account
+                        <Form.Item>
+                            <Button type="primary" htmlType="submit" block>
+                                CREATE ACCOUNT
                             </Button>
                         </Form.Item>
                     </Form>
-                </>
+                </LoginContainer>
             )}
-        </div>
+        </PageContainer>
     );
 };

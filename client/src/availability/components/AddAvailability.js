@@ -19,7 +19,7 @@ export const AddAvailability = ({
     const [selectedTimes, setSelectedTimes] = useState([]);
     const [drawerVisible, setDrawerVisible] = useState(false);
 
-    const onSaveClicked = async () => {
+    const handleSaveClicked = async () => {
         if (
             selectedDate &&
             (selectedTimes.length > 0 || availability.has(selectedDate))
@@ -27,14 +27,14 @@ export const AddAvailability = ({
             try {
                 await updateAvailability(user.uid, selectedDate, selectedTimes);
                 onAvailabilityAdded();
-                onClose();
+                handleClose();
             } catch (err) {
                 console.log(`Save Availability Error: ${err}`);
             }
         }
     };
 
-    const onDateSelected = (date) => {
+    const handleDateSelected = (date) => {
         form.resetFields(['time']);
         setSelectedTimes([]);
         if (date) {
@@ -55,7 +55,7 @@ export const AddAvailability = ({
         );
     };
 
-    const onClose = () => {
+    const handleClose = () => {
         form.resetFields();
         setSelectedDate(null);
         setSelectedTimes([]);
@@ -70,7 +70,7 @@ export const AddAvailability = ({
             <Drawer
                 title="Add availability"
                 width={720}
-                onClose={onClose}
+                handleClose={handleClose}
                 visible={drawerVisible}
                 bodyStyle={{ paddingBottom: 80 }}
                 footer={
@@ -79,10 +79,13 @@ export const AddAvailability = ({
                             textAlign: 'right',
                         }}
                     >
-                        <Button onClick={onClose} style={{ marginRight: 8 }}>
+                        <Button
+                            onClick={handleClose}
+                            style={{ marginRight: 8 }}
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={onSaveClicked} type="primary">
+                        <Button onClick={handleSaveClicked} type="primary">
                             Save
                         </Button>
                     </div>
@@ -101,7 +104,7 @@ export const AddAvailability = ({
                     >
                         <DatePicker
                             disabledDate={handleDisabledDates}
-                            onChange={onDateSelected}
+                            onChange={handleDateSelected}
                         />
                     </Form.Item>
 

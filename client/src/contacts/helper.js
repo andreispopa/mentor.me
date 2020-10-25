@@ -17,18 +17,18 @@ export const createRequest = async (senderEmail, receiverEmail) => {
     );
 };
 
-export const fetchContacts = async (userId) => {
+export const getContacts = async (userId) => {
     const response = await axios.get(
         `${process.env.REACT_APP_CONTACTS}/${userId}`
     );
     return response.data.contacts;
 };
 
-export const fetchSentRequests = async (email) => {
+export const getSentRequests = async (email) => {
     return await getRequests(email, 'sender');
 };
 
-export const fetchReceivedRequests = async (email) => {
+export const getReceivedRequests = async (email) => {
     return await getRequests(email, 'receiver');
 };
 
