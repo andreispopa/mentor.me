@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Empty } from 'antd';
+import { Divider } from 'antd';
 
 import { getAvailabilityDateToTimesMap } from '../helper';
-import { TopHeader } from '../../ui';
 import { AuthContext } from '../../context';
-import { AvailabilityListItem } from './AvailabilityListItem';
 import { AddAvailability } from './AddAvailability';
+import { PaddedContainer, PageLayout, Title, TitleSection } from '../../ui';
 
 export const AvailabilityPage = () => {
     const { user } = useContext(AuthContext);
 
-    const [availableDates, setAvailableDates] = useState({});
+    const [availableDates, setAvailableDates] = useState(() => new Map());
 
     const fetchAvailability = useCallback(async () => {
         try {
@@ -26,30 +25,20 @@ export const AvailabilityPage = () => {
     }, [fetchAvailability]);
 
     return (
-        <>
-            <TopHeader />
-            <h1>My Availability</h1>
-            <AddAvailability
-                user={user}
-                availability={availableDates}
-                onAvailabilityAdded={fetchAvailability}
-            />
+        <PageLayout>
+            <PaddedContainer>
+                <TitleSection>
+                    <Title>My Availability</Title>
+                </TitleSection>
 
-            {availableDates.size > 0 ? (
-                <div>
-                    {Array.from(availableDates.keys()).map((date, index) => {
-                        return (
-                            <AvailabilityListItem
-                                key={index}
-                                date={date}
-                                times={availableDates.get(date)}
-                            />
-                        );
-                    })}
-                </div>
-            ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-        </>
+                <Divider />
+
+                <AddAvailability
+                    user={user}
+                    availability={availableDates}
+                    onAvailabilityAdded={fetchAvailability}
+                />
+            </PaddedContainer>
+        </PageLayout>
     );
 };

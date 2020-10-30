@@ -1,12 +1,29 @@
 import React from 'react';
+import styled from 'styled-components';
+import { Avatar, Divider } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+
+import { Detail, ItemDetails, FlexContainer } from '../../ui';
+
+const Name = styled.div`
+    font-size: 1.25rem;
+`;
 
 export const ContactsListItem = ({ item }) => {
     return (
-        <div>
-            <h3>
-                {item.firstName} {item.lastName}
-            </h3>
-            <h5>{item.email}</h5>
-        </div>
+        <>
+            <FlexContainer>
+                <Avatar size={64} icon={<UserOutlined />} />
+                <ItemDetails>
+                    <Name>
+                        {item.firstName} {item.lastName}
+                    </Name>
+                    <div>
+                        <Detail>Email:</Detail> {item.email}
+                    </div>
+                </ItemDetails>
+            </FlexContainer>
+            <Divider />
+        </>
     );
 };

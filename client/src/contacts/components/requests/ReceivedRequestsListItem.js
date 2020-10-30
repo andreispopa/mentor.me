@@ -1,5 +1,16 @@
 import React from 'react';
 import axios from 'axios';
+import { Button, Divider } from 'antd';
+import styled from 'styled-components';
+
+const RequestSender = styled.span`
+    font-size: 1.1rem;
+`;
+
+const Actions = styled.span`
+    position: relative;
+    left: 2.5rem;
+`;
 
 export const ReceivedRequestsListItem = ({
     item: request,
@@ -29,9 +40,15 @@ export const ReceivedRequestsListItem = ({
 
     return (
         <div>
-            <h3>{request.sender}</h3>
-            <button onClick={handleAcceptClicked}>accept</button>
-            <button onClick={handleRejectClicked}>reject</button>
+            <RequestSender>{request.sender}</RequestSender>
+
+            <Actions>
+                <Button type="primary" onClick={handleAcceptClicked}>
+                    Accept
+                </Button>
+                <Button onClick={handleRejectClicked}>Cancel</Button>
+            </Actions>
+            <Divider />
         </div>
     );
 };

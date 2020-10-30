@@ -1,13 +1,17 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Empty } from 'antd';
+import { Divider, Empty } from 'antd';
 import axios from 'axios';
 
 import { AuthContext } from '../../context';
 import { ScheduleMeeting } from './ScheduleMeeting';
 import { MeetingsListItem } from './MeetingsListItem';
-import { List, TopHeader } from '../../ui';
-import { ROUTES } from '../../constants';
+import {
+    List,
+    PaddedContainer,
+    PageLayout,
+    Title,
+    TitleSection,
+} from '../../ui';
 
 export const MeetingsPage = () => {
     const { user } = useContext(AuthContext);
@@ -29,22 +33,20 @@ export const MeetingsPage = () => {
     }, [getMeetings]);
 
     return (
-        <>
-            <TopHeader />
-            <h1>My Meetings</h1>
-            <ScheduleMeeting onMeetingScheduled={getMeetings} />
+        <PageLayout>
+            <PaddedContainer>
+                <TitleSection>
+                    <Title>My Meetings</Title>
+                    <ScheduleMeeting onMeetingScheduled={getMeetings} />
+                </TitleSection>
 
-            {meetings.length > 0 ? (
-                <List items={meetings} itemComponent={MeetingsListItem} />
-            ) : (
-                <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-            )}
-            <Link to={ROUTES.CONTACTS}>
-                <Button type="primary">Contacts</Button>
-            </Link>
-            <Link to={ROUTES.AVAILABILITY}>
-                <Button type="primary">My Availability</Button>
-            </Link>
-        </>
+                <Divider />
+                {meetings.length > 0 ? (
+                    <List items={meetings} itemComponent={MeetingsListItem} />
+                ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                )}
+            </PaddedContainer>
+        </PageLayout>
     );
 };

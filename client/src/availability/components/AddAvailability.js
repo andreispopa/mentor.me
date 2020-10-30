@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Drawer, Form, Button, Select, DatePicker } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Calendar, Form, Button, Modal, Select } from 'antd';
 import moment from 'moment';
 
 import { updateAvailability } from '../helper';
@@ -17,7 +16,7 @@ export const AddAvailability = ({
 
     const [selectedDate, setSelectedDate] = useState();
     const [selectedTimes, setSelectedTimes] = useState([]);
-    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const handleSaveClicked = async () => {
         if (
@@ -39,11 +38,11 @@ export const AddAvailability = ({
         setSelectedTimes([]);
         if (date) {
             const formattedDate = date.format(DATE_FORMAT);
-            console.log(date);
             setSelectedDate(formattedDate);
             if (availability && availability.has(formattedDate)) {
                 setSelectedTimes(availability.get(formattedDate));
             }
+            setModalVisible(true);
         } else {
             setSelectedDate(null);
         }
@@ -55,59 +54,53 @@ export const AddAvailability = ({
         );
     };
 
+    const handleDateCellRender = (dateObject) => {
+        const date = dateObject.format(DATE_FORMAT);
+        const hasAvailableTimes = availability.has(date);
+
+        return hasAvailableTimes ? (
+            <ul className="times">
+                {availability.get(date).map((time) => (
+                    <li key={time}>{time}</li>
+                ))}
+            </ul>
+        ) : null;
+    };
+
     const handleClose = () => {
         form.resetFields();
         setSelectedDate(null);
         setSelectedTimes([]);
-        setDrawerVisible(false);
+        setModalVisible(false);
     };
 
     return (
         <>
-            <Button type="primary" onClick={() => setDrawerVisible(true)}>
-                <PlusOutlined /> Add availability
-            </Button>
-            <Drawer
-                title="Add availability"
-                width={720}
-                handleClose={handleClose}
-                visible={drawerVisible}
-                bodyStyle={{ paddingBottom: 80 }}
-                footer={
-                    <div
-                        style={{
-                            textAlign: 'right',
-                        }}
+            <Calendar
+                onSelect={handleDateSelected}
+                dateCellRender={handleDateCellRender}
+                disabledDate={handleDisabledDates}
+            />
+            <Modal
+                visible={modalVisible}
+                title={`Change Availability ${
+                    selectedDate ? `for ${selectedDate}` : ''
+                }`}
+                onCancel={handleClose}
+                footer={[
+                    <Button key="back" onClick={handleClose}>
+                        Cancel
+                    </Button>,
+                    <Button
+                        key="submit"
+                        type="primary"
+                        onClick={handleSaveClicked}
                     >
-                        <Button
-                            onClick={handleClose}
-                            style={{ marginRight: 8 }}
-                        >
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSaveClicked} type="primary">
-                            Save
-                        </Button>
-                    </div>
-                }
+                        Save
+                    </Button>,
+                ]}
             >
                 <Form form={form}>
-                    <Form.Item
-                        name="date"
-                        label="Date"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select a date',
-                            },
-                        ]}
-                    >
-                        <DatePicker
-                            disabledDate={handleDisabledDates}
-                            onChange={handleDateSelected}
-                        />
-                    </Form.Item>
-
                     <Select
                         mode="multiple"
                         allowClear
@@ -128,7 +121,7 @@ export const AddAvailability = ({
                         })}
                     </Select>
                 </Form>
-            </Drawer>
+            </Modal>
         </>
     );
 };

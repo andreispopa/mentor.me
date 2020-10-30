@@ -1,15 +1,20 @@
 import React from 'react';
-import { Empty } from 'antd';
+import { Divider, Empty } from 'antd';
 
-import { List } from '../../ui';
+import { List, Title, TitleSection } from '../../ui';
 import { ContactsListItem } from './ContactsListItem';
+import { AddContactModal } from './AddContactModal';
 
 // TODO: Add ability to search through contacts
 
-export const ContactsList = ({ contacts }) => {
+export const ContactsList = ({ contacts, ...props }) => {
     return (
         <>
-            <h1>My Contacts</h1>
+            <TitleSection>
+                <Title>My Contacts</Title>
+                <AddContactModal {...props} />
+            </TitleSection>
+            <Divider />
             {contacts.length > 0 ? (
                 <List items={contacts} itemComponent={ContactsListItem} />
             ) : (

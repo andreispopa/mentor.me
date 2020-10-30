@@ -1,7 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import { Drawer, Form, Button, Input, Select, DatePicker } from 'antd';
+import {
+    Row,
+    Col,
+    Drawer,
+    Form,
+    Button,
+    Input,
+    Select,
+    DatePicker,
+    Grid,
+} from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import socketIOClient from 'socket.io-client';
 
@@ -15,10 +25,12 @@ import { DATE_FORMAT } from '../../constants';
 
 const { Option } = Select;
 const { TextArea } = Input;
+const { useBreakpoint } = Grid;
 
 export const ScheduleMeeting = ({ onMeetingScheduled }) => {
     const { user } = useContext(AuthContext);
     const contacts = useContacts(user);
+    const screenSize = useBreakpoint();
     const [form] = Form.useForm();
 
     const [message, setMessage] = useState('');
@@ -85,14 +97,14 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
         );
     };
 
-    const onDateSelected = (date) => {
+    const handleDateSelected = (date) => {
         setMessage('');
         const formattedDate = date.format(DATE_FORMAT);
         setSelectedDate(formattedDate);
         setAvailableTimes(availableDates.get(formattedDate));
     };
 
-    const onScheduleClicked = async () => {
+    const handleScheduleClicked = async () => {
         const newMeeting = {
             participant1: user.uid,
             participant2: selectedUserId,
@@ -122,13 +134,13 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
                 remainingTimes
             );
             onMeetingScheduled();
-            onClose();
+            handleClose();
         } catch (err) {
             console.log(`Create Meeting Error: ${err}`);
         }
     };
 
-    const onSelectedUserChanged = (id) => {
+    const handleSelectedUserChanged = (id) => {
         setSelectedUserId(id);
         form.resetFields(['date', 'time']);
         setSelectedDate(null);
@@ -136,7 +148,7 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
         setMessage('');
     };
 
-    const onClose = () => {
+    const handleClose = () => {
         form.resetFields();
         setSelectedUserId(null);
         setSelectedDate(null);
@@ -147,13 +159,17 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
 
     return (
         <>
-            <Button type="primary" onClick={() => setDrawerVisible(true)}>
-                <PlusOutlined /> New meeting
+            <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={() => setDrawerVisible(true)}
+            >
+                New meeting
             </Button>
             <Drawer
                 title="Schedule a new meeting"
-                width={720}
-                onClose={onClose}
+                onClose={handleClose}
+                width={!!screenSize.lg ? '30%' : '85%'}
                 visible={drawerVisible}
                 bodyStyle={{ paddingBottom: 80 }}
                 footer={
@@ -162,16 +178,19 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
                             textAlign: 'right',
                         }}
                     >
-                        <Button onClick={onClose} style={{ marginRight: 8 }}>
+                        <Button
+                            onClick={handleClose}
+                            style={{ marginRight: 8 }}
+                        >
                             Cancel
                         </Button>
-                        <Button onClick={onScheduleClicked} type="primary">
+                        <Button onClick={handleScheduleClicked} type="primary">
                             Schedule
                         </Button>
                     </div>
                 }
             >
-                <Form form={form}>
+                <Form form={form} layout="vertical" hideRequiredMark>
                     <Form.Item
                         name="other-party"
                         label="With"
@@ -184,7 +203,7 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
                         ]}
                     >
                         <Select
-                            onChange={onSelectedUserChanged}
+                            onChange={handleSelectedUserChanged}
                             placeholder="Select person to meet with"
                         >
                             {contacts.map((contact) => {
@@ -199,48 +218,55 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
                             })}
                         </Select>
                     </Form.Item>
-
-                    <Form.Item
-                        name="date"
-                        label="Date"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select a date',
-                            },
-                        ]}
-                    >
-                        <DatePicker
-                            disabledDate={handleDisabledDates}
-                            disabled={!selectedUserId}
-                            onChange={onDateSelected}
-                        />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="time"
-                        label="Time"
-                        rules={[
-                            {
-                                required: true,
-                                message: 'Please select the time',
-                            },
-                        ]}
-                    >
-                        <Select
-                            onChange={(time) => setSelectedTime(time)}
-                            disabled={!selectedDate}
-                            placeholder="Select time"
-                        >
-                            {availableTimes.map((time) => {
-                                return (
-                                    <Option key={time} value={time}>
-                                        {time}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
-                    </Form.Item>
+                    <Row gutter={12}>
+                        <Col span={12}>
+                            <Form.Item
+                                name="date"
+                                label="Date"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please select a date',
+                                    },
+                                ]}
+                            >
+                                <DatePicker
+                                    disabledDate={handleDisabledDates}
+                                    disabled={!selectedUserId}
+                                    onChange={handleDateSelected}
+                                    style={{
+                                        width: '100%',
+                                    }}
+                                />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item
+                                name="time"
+                                label="Time"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Please select the time',
+                                    },
+                                ]}
+                            >
+                                <Select
+                                    onChange={(time) => setSelectedTime(time)}
+                                    disabled={!selectedDate}
+                                    placeholder="Select time"
+                                >
+                                    {availableTimes.map((time) => {
+                                        return (
+                                            <Option key={time} value={time}>
+                                                {time}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
                     <Form.Item name="notes" label="Notes">
                         <TextArea
                             rows={4}

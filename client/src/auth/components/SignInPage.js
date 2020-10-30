@@ -1,18 +1,13 @@
 import React, { useState, useContext } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
-import { Alert, Form, Input, Button, Col } from 'antd';
+import { Alert, Form, Input, Button } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
 
-import { PageContainer, TopHeader } from '../../ui';
+import { CalendarSVG, PageContainer } from '../../ui';
 import { auth } from '../auth';
+import { FormContainer } from './FormContainer';
 import { AuthContext } from '../../context';
 import { ROUTES } from '../../constants';
-
-const LoginContainer = styled(Col)`
-    background-color: Gainsboro;
-    padding: 10px 20px;
-`;
 
 export const SignInPage = () => {
     const { user } = useContext(AuthContext);
@@ -42,7 +37,14 @@ export const SignInPage = () => {
 
     return (
         <PageContainer justify="center" align="middle">
-            <LoginContainer xs={22} sm={22} md={10} lg={8}>
+            <CalendarSVG />
+            <FormContainer
+                welcomeMessage="Are you ready to schedule some meetings?"
+                xs={22}
+                sm={18}
+                md={18}
+                lg={8}
+            >
                 <h2>SIGN IN</h2>
                 <Form
                     name="basic"
@@ -98,7 +100,7 @@ export const SignInPage = () => {
                         Create a new account now
                     </Button>
                 </span>
-            </LoginContainer>
+            </FormContainer>
         </PageContainer>
     );
 };

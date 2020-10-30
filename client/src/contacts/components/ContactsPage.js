@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import { AuthContext } from '../../context';
-import { TopHeader } from '../../ui';
 import { ContactsList } from './ContactsList';
 import { RequestsList } from './requests/RequestsList';
 import { getSentRequests, getReceivedRequests, getContacts } from '../helper';
-import { AddContactModal } from './AddContactModal';
+import { PaddedContainer, PageLayout } from '../../ui';
 
 export const ContactsPage = () => {
     const { user } = useContext(AuthContext);
@@ -54,18 +53,20 @@ export const ContactsPage = () => {
     }, [fetchReceivedRequests]);
 
     return (
-        <>
-            <TopHeader />
-
-            <AddContactModal user={user} onContactAdded={fetchSentRequests} />
-
-            <RequestsList
-                sentRequests={sentRequests}
-                receivedRequests={receivedRequests}
-                onChange={fetchReceivedRequests}
-                onRequestAccepted={fetchContacts}
-            />
-            <ContactsList contacts={contacts} />
-        </>
+        <PageLayout>
+            <PaddedContainer>
+                <RequestsList
+                    sentRequests={sentRequests}
+                    receivedRequests={receivedRequests}
+                    onChange={fetchReceivedRequests}
+                    onRequestAccepted={fetchContacts}
+                />
+                <ContactsList
+                    user={user}
+                    onContactAdded={fetchSentRequests}
+                    contacts={contacts}
+                />
+            </PaddedContainer>
+        </PageLayout>
     );
 };
