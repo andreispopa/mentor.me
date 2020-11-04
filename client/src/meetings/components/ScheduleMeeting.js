@@ -43,7 +43,7 @@ export const ScheduleMeeting = ({ onMeetingScheduled }) => {
     const [notes, setNotes] = useState('');
 
     useEffect(() => {
-        const socket = socketIOClient('http://127.0.0.1:3007');
+        const socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_URL);
         socket.on('newAvailability', (data) => {
             const { userId, times, date } = data.availability;
             if (selectedUserId === userId) {

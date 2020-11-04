@@ -1,11 +1,13 @@
 import 'dotenv/config';
+import 'regenerator-runtime/runtime';
 import express from 'express';
 import http from 'http';
 import socketIO from 'socket.io';
 import mongoose from 'mongoose';
+import cors from 'cors';
 
-import apiRouter from './src/routes/api';
-import authRouter from './src/routes/auth';
+import apiRouter from './routes/api';
+import authRouter from './routes/auth';
 
 const app = express();
 const port = process.env.PORT_NUMBER;
@@ -32,6 +34,12 @@ mongoose
     )
     .then(() => console.log('DB connection successful'))
     .catch((err) => console.log(`DB connection failed: ${err}`));
+
+const corsOptions = {
+    origin: 'http://localhost:3000',
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 

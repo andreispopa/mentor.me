@@ -27,7 +27,6 @@ export const PageLayout = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     const handleCollapse = (collapsed) => {
-        console.log(collapsed);
         setCollapsed(collapsed);
     };
 

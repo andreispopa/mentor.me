@@ -6,6 +6,5 @@ const Container = styled.div`
 `;
 
 export const PaddedContainer = ({ children, ...props }) => {
-    console.log(props);
     return <Container {...props}>{children}</Container>;
 };
