@@ -4,8 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "install-client": "npm install --prefix ./client ./client",
+        "install-server": "npm install --prefix ./server ./server",
+        "install": "npm-run-all install-client install-server",
         "client": "npm start --prefix ./client",
-        "server": "npm run dev --prefix ./server"
+        "server": "npm start --prefix ./server"
     },
     "repository": {
         "type": "git",
@@ -17,5 +20,8 @@
     "bugs": {
         "url": "https://github.com/andreispopa/mentor.me/issues"
     },
-    "homepage": "https://github.com/andreispopa/mentor.me#readme"
+    "homepage": "https://github.com/andreispopa/mentor.me#readme",
+    "dependencies": {
+        "npm-run-all": "^4.1.5"
+    }
 }
