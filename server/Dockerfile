@@ -1,10 +1,11 @@
-FROM node:alpine
+FROM node:15-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --no-optional
 COPY . .
 RUN npm run build
 
-CMD ["node", "build/server.js"]
+COPY wait-for.sh ./
+RUN chmod +x wait-for.sh

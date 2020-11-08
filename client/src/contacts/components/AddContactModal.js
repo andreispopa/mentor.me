@@ -18,6 +18,7 @@ export const AddContactModal = ({ user, onContactAdded }) => {
         try {
             await createRequest(user.email, newContactEmail);
             onContactAdded();
+            setNewContactEmail('');
             setModalLoading(false);
             setModalVisible(false);
         } catch (err) {

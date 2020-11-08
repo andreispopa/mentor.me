@@ -3,14 +3,33 @@ version: '3'
 services:
     api:
         build: ./server
+        container_name: mm-server
+        depends_on:
+            - db
+        env_file: ./server/.env
+        environment:
+            - DB_HOSTNAME=db
         ports:
             - '3007:3007'
-        container_name: mm-server
+        command: sh -c "/app/wait-for.sh db:27017 && node /app/build/server.js"
+        restart: unless-stopped
 
     client:
         build: ./client
-        ports:
-            - '3000:80'
+        container_name: mm-client
         depends_on:
             - api
-        container_name: mm-client
+        ports:
+            - '3000:80'
+        restart: unless-stopped
+
+    db:
+        image: mongo
+        container_name: mm-db
+        environment:
+            MONGO_INITDB_DATABASE: MentorMeDB
+        ports:
+            - '27017:27017'
+        volumes:
+            - ./db/seed-db.js:/docker-entrypoint-initdb.d/seed-db.js:ro
+        restart: unless-stopped

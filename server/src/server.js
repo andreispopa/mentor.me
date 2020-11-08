@@ -6,11 +6,19 @@ import socketIO from 'socket.io';
 import mongoose from 'mongoose';
 import cors from 'cors';
 
+const {
+    PORT_NUMBER,
+    CLIENT_PORT_NUMBER,
+    DB_HOSTNAME,
+    DB_PORT,
+    DB_NAME,
+} = process.env;
+
 import apiRouter from './routes/api';
 import authRouter from './routes/auth';
 
 const app = express();
-const port = process.env.PORT_NUMBER;
+const port = PORT_NUMBER;
 
 const server = http.createServer(app);
 const io = socketIO(server);
@@ -23,20 +31,18 @@ io.on('connection', (socket) => {
     });
 });
 
+const dbUrl = `mongodb://${DB_HOSTNAME}:${DB_PORT}/${DB_NAME}?retryWrites=true&w=majority`;
 mongoose.set('useFindAndModify', false);
 mongoose
-    .connect(
-        `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_URL}?retryWrites=true&w=majority`,
-        {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        }
-    )
+    .connect(dbUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
     .then(() => console.log('DB connection successful'))
     .catch((err) => console.log(`DB connection failed: ${err}`));
 
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: `http://localhost:${CLIENT_PORT_NUMBER}`,
 };
 
 app.use(cors(corsOptions));

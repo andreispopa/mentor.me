@@ -7,13 +7,13 @@ import { ReactComponent as Calendar } from './calendar.svg';
 const { useBreakpoint } = Grid;
 
 const SVG = styled(Calendar)`
-    display: ${(props) => (props.screenSize.lg ? 'block' : 'none')};
-    width: ${(props) => props.screenSize.lg && '30%'};
+    display: ${(props) => (props.screensize.lg ? 'block' : 'none')};
+    width: ${(props) => props.screensize.lg && '30%'};
     margin-right: 5rem;
 `;
 
 export const CalendarSVG = () => {
     const screenSize = useBreakpoint();
 
-    return <SVG screenSize={screenSize} />;
+    return <SVG screensize={screenSize} />;
 };

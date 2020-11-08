@@ -1,4 +1,4 @@
-FROM node:alpine as build-step
+FROM node:15-alpine as build-step
 
 WORKDIR /app
 
@@ -7,5 +7,5 @@ RUN npm install --no-optional
 COPY . .
 RUN npm run build
 
-FROM nginx:stable-alpine
+FROM nginx:1.18-alpine
 COPY --from=build-step /app/build /usr/share/nginx/html
