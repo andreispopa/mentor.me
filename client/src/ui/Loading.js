@@ -10,7 +10,6 @@ const Div = styled.div`
     justify-content: center;
     background: rgb(240, 242, 245);
     height: 100vh;
-    width: 100vw;
 `;
 
 const BiggerSpin = styled(Spin)`

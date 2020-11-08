@@ -1,9 +1,9 @@
-FROM node:15-alpine
+FROM node:14-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install --no-optional
+RUN npm install
 COPY . .
 RUN npm run build
 
